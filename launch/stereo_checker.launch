@@ -1,0 +1,23 @@
+<launch>
+    <arg name="test" default="false"/>
+    <arg name="camera" default="stereo"/>
+
+    <arg name="dist_thresh" default="10"/>
+    <arg name="delta_v_thresh" default="5"/>
+
+    <!-- Test -->
+    <node pkg="rosbag" type="play" name="player"
+        args="-l /home/chao/Workspace/bag/mrsl/mrsl1.bag"/>
+
+    <!-- Proc -->
+    <node pkg="stereo_image_proc" type="stereo_image_proc"
+        name="stereo_image_proc" ns="$(arg camera)">
+    </node>
+
+    <!-- Check -->
+    <node pkg="bluefox2" type="stereo_checker" name="stereo_checker"
+        ns="$(arg camera)" output="screen">
+        <param name="dist_thresh" type="double" value="$(arg dist_thresh)"/>
+        <param name="delta_v_thresh" type="double" value="$(arg delta_v_thresh)"/>
+    </node>
+</launch>
